@@ -44,7 +44,7 @@
     <thead class="table-head">
     {% for header in headers %}
     {% if "Test" in headers or "Query" in headers or "Paper Title" in headers %}
-      <th {% if header not in ["Test", "Top Path", "Query", "Model", "Paper Title"] %}style="width: 10%; text-align: center"{% endif %}>{{ header }}</th>
+      <th {% if header not in ["Test", "Top Path", "Query", "Model", "Paper Title"] %}style="width: 15%; text-align: center"{% endif %}>{{ header }}</th>
     {% elif header in ["Item"] %}
       <th style="width: 30%; text-align: left">{{ header }}</th>
     {% elif header in ["Evidence Count"] %}
@@ -139,6 +139,17 @@
                   :init_expanded="{{ expand }}"
                   :badges="{{ badges }}"></statement>
     </td>
+  {% elif row_el|length == 6 %}
+  <td style="text-align: center">
+    {% set ann, ann_url, paper_id, paper_link, publication, text = row_el %}
+    <span><a href="{{ paper_link }}" class="stmt-dblink" title="{{ text }}" target="_blank">{{ publication }}  </a><a onClick="annotate('{{ ann_url }}', '{{ paper_id }}')" class="badge badge-dark" style="padding-left: 3px; padding-right: 3px; cursor: pointer; color: white;" title="Annotate this paper">h.</a></span>
+    <div class="container">
+      <div id="{{ paper_id }}-gif" style="display: none;">
+        <img src="https://indralab.github.io/emmaa/emmaa_service/dashboard/images/ajax-loader.gif">
+      </div>
+      <span><i id="{{ paper_id }}-status" style="word-break:break-word;"></i></span>
+    </div>
+  </td>
   {% endif %}
   {% endfor %}
   </tr>
