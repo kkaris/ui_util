@@ -140,7 +140,7 @@
                   :badges="{{ badges }}"></statement>
     </td>
   {% elif row_el|length == 6 %}
-  <td>
+  <td style="text-align: center">
     {% set ann, ann_url, paper_id, paper_link, publication, text = row_el %}
     <span><a href="{{ paper_link }}" class="stmt-dblink" title="{{ text }}" target="_blank">{{ publication }}  </a><a onClick="annotate('{{ ann_url }}', '{{ paper_id }}')" class="badge badge-dark" style="padding-left: 3px; padding-right: 3px; cursor: pointer; color: white;" title="Annotate this paper">h.</a></span>
     <div class="container">
