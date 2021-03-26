@@ -101,6 +101,11 @@
       {% endif %}
       {% if not link_text %}
         <img src="{{ link_address }}"/>
+      {% elif link_text == 'Subscribe to get model updates' %}
+        <a onclick="subscribe_model('{{ link_address }}')" class="stmt-dblink" style="cursor: pointer;" title="{{ evid_text }}">{{ link_text }}</a>
+        <div>
+        <span><i id="model-subscription-status" style="word-break:break-word;"></i></span>
+        </div>
       {% elif link_address and evid_text %}
         <a href="{{ link_address }}" class="stmt-dblink" title="{{ evid_text }}" target="_blank">{{ link_text }}</a>
       {% elif link_address and not evid_text %}
