@@ -29,7 +29,7 @@
         {% set logged_in, subscribe, url = subscription %}
         {% if logged_in %}
           <h4 class="my-0 font-weight-normal">{{ card_header }}<button class="btn btn-outline-secondary" onClick="subscribe_model('{{ url }}', '{{ subscribe }}')" style="position: absolute; right: 10px; top: 1.1%" type="button">{% if subscribe %}Subscribe{% else %}Unsubscribe{% endif %}</button></h4>
-          <span><i id="model-subscription-status" style="word-break:break-word;"></i></span>
+          <span><i id="model-subscription-status" style="word-break:break-word; float: right;"></i></span>
         {% else %}
         <h4 class="my-0 font-weight-normal" style="float: left">{{ card_header }}</h4><span style="font-size: medium; float: right">(Log in and refresh to see if you're subscribed to this model)</span>
         {% endif %}
