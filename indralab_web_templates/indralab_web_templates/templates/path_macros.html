@@ -20,18 +20,18 @@
   </div>
 {%- endmacro %}
 
-{% macro path_card(path_list, card_header, card_id, table_headers=[], table_id=None, merge=false, url=None) -%}
+{% macro path_card(path_list, card_header, card_id, table_headers=[], table_id=None, merge=false, url=None, center=true) -%}
   <div class="card" id="{{ card_id }}">
     <div class="card-header">
       <h4 class="my-0 font-weight-normal">{{ card_header }}</h4>
     </div>
     <div class="card-body">
-      {{ path_table(path_list, table_headers, table_id, merge, url) }}
+      {{ path_table(path_list, table_headers, table_id, merge, url, center) }}
     </div>
   </div>
 {%- endmacro %}
 
-{% macro path_table(path_list, headers=[], id=None, merge=false, url=None) -%}
+{% macro path_table(path_list, headers=[], id=None, merge=false, url=None, center=true) -%}
 {% if path_list is string %}
   <p>{{ path_list }}</p>
 {% else %}
@@ -52,13 +52,13 @@
     </thead>
     {% endif %}
     <tbody class="table-body" {% if id %}id="{{ id }}"{% endif %}>
-      {{ path_table_contents(path_list, merge, url) }}
+      {{ path_table_contents(path_list, merge, url, center) }}
     </tbody>
   </table>
 {% endif %}
 {%- endmacro %}
 
-{% macro path_table_contents(paths, merge=false, url=None) -%}
+{% macro path_table_contents(paths, merge=false, url=None, center=true) -%}
   {% for row in paths %}
   <tr>
   {% for row_el in row %}
@@ -90,7 +90,7 @@
     {% elif merge and loop.length == 1 %}
       <td colspan="2" style="text-align:center; font-weight: bold;">{{ link_text }}</td>
     {% else %}
-      {% if link_text in ['PubMed', 'PMC', 'DOI', 'N/A'] or link_text|int(-1) != -1 %}
+      {% if center and (link_text in ['PubMed', 'PMC', 'DOI', 'N/A'] or link_text|int(-1) != -1) %}
       <td style="text-align: center">
       {% else %}
       <td>
