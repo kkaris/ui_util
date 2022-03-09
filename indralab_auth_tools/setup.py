@@ -11,6 +11,7 @@ def main():
         packages=find_packages(),
         install_requires=["flask-jwt-extended<4.0.0", "flask", "sqlalchemy", "scrypt"],
         include_package_data=True,
+        version="1.0.0",
     )
 
 
