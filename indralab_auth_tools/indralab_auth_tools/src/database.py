@@ -1,14 +1,15 @@
-import os
 import logging
 
 from sqlalchemy import create_engine
 from sqlalchemy.orm import scoped_session, sessionmaker
 from sqlalchemy.ext.declarative import declarative_base
 
+from indralab_auth_tools.conf import get_indra_conf
+
 logger = logging.getLogger(__name__)
 
 try:
-    db_config = os.environ['INDRALAB_USERS_DB']
+    db_config = get_indra_conf('INDRALAB_USERS_DB')
     # This is for handling empty strings set as the environmental variable
     if not db_config:
         raise KeyError()
