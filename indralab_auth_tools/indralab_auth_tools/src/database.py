@@ -9,15 +9,14 @@ from indralab_auth_tools.conf import get_indra_conf
 logger = logging.getLogger(__name__)
 
 try:
-    db_config = get_indra_conf('INDRALAB_USERS_DB')
+    db_config = get_indra_conf("INDRALAB_USERS_DB", missing_ok=False)
     # This is for handling empty strings set as the environmental variable
     if not db_config:
         raise KeyError()
-    engine = create_engine(db_config,
-                           convert_unicode=True)
-    db_session = scoped_session(sessionmaker(autocommit=False,
-                                             autoflush=False,
-                                             bind=engine))
+    engine = create_engine(db_config, convert_unicode=True)
+    db_session = scoped_session(
+        sessionmaker(autocommit=False, autoflush=False, bind=engine)
+    )
     Base = declarative_base()
     Base.query = db_session.query_property()
 except KeyError:
@@ -34,4 +33,5 @@ def init_db():
     # they will be registered properly on the metadata.  Otherwise
     # you will have to import them first before calling init_user_db()
     import indralab_auth_tools.src.models as models
+
     Base.metadata.create_all(bind=engine)
