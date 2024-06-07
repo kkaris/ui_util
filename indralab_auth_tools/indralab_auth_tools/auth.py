@@ -5,7 +5,7 @@ from functools import wraps
 
 from http.cookies import SimpleCookie
 
-from flask_jwt_extended import jwt_optional, get_jwt_identity, \
+from flask_jwt_extended import jwt_required, get_jwt_identity, \
     create_access_token, set_access_cookies, unset_jwt_cookies, JWTManager
 
 from flask import Blueprint, jsonify, request, redirect
@@ -46,7 +46,7 @@ def config_auth(app):
 
 
 def auth_wrapper(func):
-    @jwt_optional
+    @jwt_required(optional=True)
     @wraps(func)
     def with_auth_log():
         start_fresh()
@@ -204,8 +204,8 @@ def logout(auth_details, user_identity):
 def resolve_auth(query, failure_reason=None):
     """Get the roles for the current request, either by JWT or API key.
 
-    If by API key, the key must be in the query. If by JWT, @jwt_optional or
-    similar must wrap the calling function.
+    If by API key, the key must be in the query. If by JWT,
+    @jwt_required(optional=True) or similar must wrap the calling function.
 
     If the reason for credentials failing is of interest, you can pass an empty
     dictionary to `failure_reason`. If there is an auth problem, it will be
