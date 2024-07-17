@@ -33,6 +33,7 @@ def config_auth(app):
     app.config['PROPAGATE_EXCEPTIONS'] = True
     app.config['JWT_COOKIE_CSRF_PROTECT'] = False
     app.config['EXPLAIN_TEMPLATE_LOADING'] = True
+    app.config['JWT_IDENTITY_CLAIM'] = 'identity'
     SC = SimpleCookie()
     jwt = JWTManager(app)
 
