@@ -33,6 +33,12 @@ def config_auth(app):
     app.config['PROPAGATE_EXCEPTIONS'] = True
     app.config['JWT_COOKIE_CSRF_PROTECT'] = False
     app.config['EXPLAIN_TEMPLATE_LOADING'] = True
+    # Setting JWT_IDENTITY_CLAIM to 'identity' to override the new default 'sub'. This
+    # allows those with tokens still active and issued by the old deployment (which
+    # used Flask-JWT-Extended < 4) to still load the homepage of the new deployment. If
+    # this is not done, a user with an active old JWT will be greeted with an error
+    # that refers to a missing key ('identity' or 'sub'). See more at:
+    # https://flask-jwt-extended.readthedocs.io/en/stable/v4_upgrade_guide.html#encoded-jwt-changes-important
     app.config['JWT_IDENTITY_CLAIM'] = 'identity'
     SC = SimpleCookie()
     jwt = JWTManager(app)
