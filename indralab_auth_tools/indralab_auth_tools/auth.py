@@ -5,7 +5,7 @@ from functools import wraps
 
 from http.cookies import SimpleCookie
 
-from flask_jwt_extended import jwt_optional, get_jwt_identity, \
+from flask_jwt_extended import jwt_required, get_jwt_identity, \
     create_access_token, set_access_cookies, unset_jwt_cookies, JWTManager
 
 from flask import Blueprint, jsonify, request, redirect
@@ -33,6 +33,13 @@ def config_auth(app):
     app.config['PROPAGATE_EXCEPTIONS'] = True
     app.config['JWT_COOKIE_CSRF_PROTECT'] = False
     app.config['EXPLAIN_TEMPLATE_LOADING'] = True
+    # Setting JWT_IDENTITY_CLAIM to 'identity' to override the new default 'sub'. This
+    # allows those with tokens still active and issued by the old deployment (which
+    # used Flask-JWT-Extended < 4) to still load the homepage of the new deployment. If
+    # this is not done, a user with an active old JWT will be greeted with an error
+    # that refers to a missing key ('identity' or 'sub'). See more at:
+    # https://flask-jwt-extended.readthedocs.io/en/stable/v4_upgrade_guide.html#encoded-jwt-changes-important
+    app.config['JWT_IDENTITY_CLAIM'] = 'identity'
     SC = SimpleCookie()
     jwt = JWTManager(app)
 
@@ -46,7 +53,7 @@ def config_auth(app):
 
 
 def auth_wrapper(func):
-    @jwt_optional
+    @jwt_required(optional=True)
     @wraps(func)
     def with_auth_log():
         start_fresh()
@@ -204,8 +211,8 @@ def logout(auth_details, user_identity):
 def resolve_auth(query, failure_reason=None):
     """Get the roles for the current request, either by JWT or API key.
 
-    If by API key, the key must be in the query. If by JWT, @jwt_optional or
-    similar must wrap the calling function.
+    If by API key, the key must be in the query. If by JWT,
+    @jwt_required(optional=True) or similar must wrap the calling function.
 
     If the reason for credentials failing is of interest, you can pass an empty
     dictionary to `failure_reason`. If there is an auth problem, it will be
